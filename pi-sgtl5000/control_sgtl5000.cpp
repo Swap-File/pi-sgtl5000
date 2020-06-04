@@ -733,13 +733,13 @@ unsigned short AudioControlSGTL5000::adcHighPassFilterDisable(void)
 unsigned short AudioControlSGTL5000::audioPreProcessorEnable(void)
 {
 	// audio processor used to pre-process analog input before Teensy
-	return write(DAP_CONTROL, 1) && write(CHIP_SSS_CTRL, 0x0013);
+	return write(DAP_CONTROL, 0x0001) && write(CHIP_SSS_CTRL, 0x0013);
 }
 
 unsigned short AudioControlSGTL5000::audioPostProcessorEnable(void)
 {
 	// audio processor used to post-process Teensy output before headphones/lineout
-	return write(DAP_CONTROL, 1) && write(CHIP_SSS_CTRL, 0x0070);
+	return write(DAP_CONTROL, 0x0001) && write(CHIP_SSS_CTRL, 0x0070);
 }
 
 unsigned short AudioControlSGTL5000::audioProcessorDisable(void)
@@ -747,6 +747,10 @@ unsigned short AudioControlSGTL5000::audioProcessorDisable(void)
 	return write(CHIP_SSS_CTRL, 0x0010) && write(DAP_CONTROL, 0);
 }
 
+unsigned short AudioControlSGTL5000::dapMix(float main, float mix)
+{
+	return write(DAP_MAIN_CHAN, calcMix( main, 0xFFFF)) && write(DAP_MIX_CHAN, calcMix( mix, 0xFFFF));
+}
 
 // DAP_PEQ
 unsigned short AudioControlSGTL5000::eqFilterCount(uint8_t n) // valid to n&7, 0 thru 7 filters enabled.
@@ -889,6 +893,13 @@ unsigned char AudioControlSGTL5000::calcVol(float n, unsigned char range)
 	n=(n*(float)range)+0.499;
 	if ((unsigned char)n>range) n=range;
 	return (unsigned char)n;
+}
+
+uint16_t AudioControlSGTL5000::calcMix(float n, uint16_t range)
+{
+	n=(n*(float)range)+0.4999;
+	if ((uint16_t)n>range) n=range;
+	return (uint16_t)n;
 }
 
 // DAP_AUDIO_EQ_BASS_BAND0 & DAP_AUDIO_EQ_BAND1 & DAP_AUDIO_EQ_BAND2 etc etc

@@ -90,13 +90,15 @@ public:
 	unsigned short surroundSoundEnable(void);
 	unsigned short surroundSoundDisable(void);
 	void killAutomation(void) { semi_automated=false; }
-
+	unsigned short dapMix(float main, float mix);
+	
 protected:
 	bool muted;
 	bool volumeInteger(uint16_t n); // range: 0x00 to 0x80
 	uint16_t ana_ctrl;
 	uint8_t i2c_addr;
 	unsigned char calcVol(float n, unsigned char range);
+	uint16_t calcMix(float n, uint16_t range);
 	uint16_t read(uint16_t reg);
 	bool write(uint16_t reg, uint16_t val);
 	uint16_t modify(uint16_t reg, uint16_t val, uint16_t iMask);
