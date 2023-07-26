@@ -14,3 +14,9 @@ It uses bcm2835 for i2c access:
 http://www.airspayce.com/mikem/bcm2835/
 
 Note:  If you take over control of the sgtl5000 with a program like this it will break alsamixer until the next reboot.  Custom settings will not persist across reboots.
+
+Note:  Rewritten to use i2cdev here:
+
+https://github.com/Swap-File/portal-gun-4/blob/master/portal/i2c/sgtl5000.c
+
+Now it can coexist with othe i2c devices.
